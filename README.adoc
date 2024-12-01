@@ -16,8 +16,8 @@
 :page-related-guides: ['istio-intro', 'microprofile-fallback', `iguide-retry-timeout`]
 :common-includes: https://raw.githubusercontent.com/OpenLiberty/guides-common/prod
 :source-highlighter: prettify
-:page-seo-title: Building resilient Java microservices using Eclipse MicroProfile and Istio Fault Tolerance
-:page-seo-description: A tutorial on Eclipse MicroProfile Fault Tolerance integrated with Istio Fault Tolerance. Includes an example on how to develop fault-tolerant Java microservices using Istio's Retry policy and MicroProfile Fault Tolerance's Fallback mechanism.
+:page-seo-title: Building resilient Java microservices using MicroProfile and Istio Fault Tolerance
+:page-seo-description: A tutorial on MicroProfile Fault Tolerance integrated with Istio Fault Tolerance. Includes an example on how to develop fault-tolerant Java microservices using Istio's Retry policy and MicroProfile Fault Tolerance's Fallback mechanism.
 :guide-author: Open Liberty
 = Developing fault-tolerant microservices with Istio Retry and MicroProfile Fallback
 
@@ -49,7 +49,7 @@ and https://download.eclipse.org/microprofile/microprofile-fault-tolerance-2.0/m
 policies with https://istio.io/docs/concepts/traffic-management/#timeouts-and-retries[Istio Retry^] 
 to make your microservices more resilient to common failures, such as network problems.
 
-Microservices that are created using Eclipse MicroProfile can be freely deployed in a service mesh to reduce the complexity 
+Microservices that are created using MicroProfile can be freely deployed in a service mesh to reduce the complexity 
 associated with managing microservices. Istio is a service mesh, meaning that it’s a platform for managing how microservices interact with each other and the outside world.
 {istio} consists of a control plane and sidecars that are injected into application pods. The sidecars contain
 the https://www.envoyproxy.io/[Envoy^] proxy. You can think of Envoy as a sidecar that intercepts
