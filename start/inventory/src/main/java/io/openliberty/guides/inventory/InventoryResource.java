@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2019, 2022 IBM Corporation and others.
+ * Copyright (c) 2019, 2025 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
  * which accompanies this distribution, and is available at
@@ -65,16 +65,16 @@ public class InventoryResource {
                 .build(SystemClient.class);
         props = systemClient.getProperties();
     } catch (MalformedURLException e) {
-      System.err.println("The given URL is not formatted correctly: "
-                        + customURLString);
+        System.err.println("The given URL is not formatted correctly: "
+                           + customURLString);
     }
 
     if (props == null) {
-      return Response.status(Response.Status.NOT_FOUND)
-                     .entity("{ \"error\" : \"Unknown hostname" + hostname
-                             + " or the resource may not be running on the"
-                             + " host machine\" }")
-                     .build();
+        return Response.status(Response.Status.NOT_FOUND)
+                       .entity("{ \"error\" : \"Unknown hostname" + hostname
+                               + " or the resource may not be running on the"
+                               + " host machine\" }")
+                       .build();
     }
 
     manager.add(hostname, props);
@@ -84,12 +84,12 @@ public class InventoryResource {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public InventoryList listContents() {
-    return manager.list();
+      return manager.list();
   }
 
   @POST
   @Path("/reset")
   public void reset() {
-    manager.reset();
+      manager.reset();
   }
 }
