@@ -1,6 +1,6 @@
 // tag::copyright[]
 /*******************************************************************************
- * Copyright (c) 2019, 2022 IBM Corporation and others.
+ * Copyright (c) 2019, 2025 IBM Corporation and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License 2.0
  * which accompanies this distribution, and is available at
@@ -12,6 +12,8 @@
 package io.openliberty.guides.inventory;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -59,16 +61,16 @@ public class InventoryResource {
   // end::mpRetry[]
   // tag::getPropertiesForHost[]
   public Response getPropertiesForHost(@PathParam("hostname") String hostname)
-        // tag::webApplicationException[]
-        throws WebApplicationException, ProcessingException, UnknownUrlException {
-        // end::webApplicationException[]
+         // tag::webApplicationException[]
+         throws WebApplicationException, ProcessingException, UnknownUrlException {
+         // end::webApplicationException[]
   // end::getPropertiesForHost[]
 
     String customURLString = "http://" + hostname + ":" + SYS_HTTP_PORT + "/system";
     URL customURL = null;
     Properties props = null;
     try {
-        customURL = new URL(customURLString);
+        customURL = new URI(customURLString).toURL();
         SystemClient systemClient = RestClientBuilder.newBuilder()
                 .baseUrl(customURL)
                 .register(UnknownUrlExceptionMapper.class)
@@ -76,17 +78,20 @@ public class InventoryResource {
         // tag::getProperties[]
         props = systemClient.getProperties();
         // end::getProperties[]
+    } catch (URISyntaxException e) {
+        System.err.println("The given URL string is not formatted correctly: "
+                           + customURLString);
     } catch (MalformedURLException e) {
-      System.err.println("The given URL is not formatted correctly: "
-                         + customURLString);
+        System.err.println("The given URL string is not formatted correctly: "
+                           + customURLString);
     }
 
     if (props == null) {
-      return Response.status(Response.Status.NOT_FOUND)
-                     .entity("{ \"error\" : \"Unknown hostname" + hostname
-                             + " or the resource may not be running on the"
-                             + " host machine\" }")
-                     .build();
+        return Response.status(Response.Status.NOT_FOUND)
+                       .entity("{ \"error\" : \"Unknown hostname" + hostname
+                               + " or the resource may not be running on the"
+                               + " host machine\" }")
+                       .build();
     }
 
     manager.add(hostname, props);
@@ -98,21 +103,22 @@ public class InventoryResource {
   public Response getPropertiesFallback(@PathParam("hostname") String hostname) {
       Properties props = new Properties();
       props.put("error", "Unknown hostname or the system service may not be running.");
-        return Response.ok(props)
-                  .header("X-From-Fallback", "yes")
-                  .build();
+      return Response.ok(props)
+                     .header("X-From-Fallback", "yes")
+                     .build();
   }
   // end::fallbackMethod[]
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public InventoryList listContents() {
-    return manager.list();
+      return manager.list();
   }
 
   @POST
   @Path("/reset")
   public void reset() {
-    manager.reset();
+      manager.reset();
   }
+
 }

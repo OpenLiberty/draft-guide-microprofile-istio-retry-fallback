@@ -1,4 +1,4 @@
-// Copyright (c) 2019, 2024 IBM Corporation and others.
+// Copyright (c) 2019, 2025 IBM Corporation and others.
 // Licensed under Creative Commons Attribution-NoDerivatives
 // 4.0 International (CC BY-ND 4.0)
 //   https://creativecommons.org/licenses/by-nd/4.0/
@@ -443,14 +443,10 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-37
+5
 ----
 
-The above command returns 37, because there was a total of 37 requests made to the `system` service.
-By default, Istio will retry 2 times to resolve any issues with a `503` response code.
-Including the initial requests and the retries, the requests made by Istio are multiplied by the requests made by MicroProfile.
-Hence, the 3 requests from the `system` service, the 3 requests from the `inventory` service, and the 4 MicroProfile requests are multiplied together,
-giving a total of 36 requests. Including the succesful request that you made before you paused the `system` service, there was a total of 37 requests.
+The above command returns 5, because there was a total of 5 requests made to the `system` service that included the initial request, 3 MicroProfile retry requests, and the succesful request that you made before you paused the `system` service.
 
 // =================================================================================================
 // Enabling Istio Fault Tolerance
@@ -551,12 +547,19 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-60
+20
 ----
 
-The above command returns a value of 60, indicating that a total of 60 requests are made to the `system` service.
-The 3 default Istio requests for the `system` service, the 5 requests for the `inventory` service
-that you enabled in the [hotspot file=0]`traffic.yaml` file, and the 4 requests sent by MicroProfile are multiplied together.
+InventoryResource.java
+[source, Java, linenums, role='code_column hide_tags=copyright,fallback,fallbackMethod']
+----
+include::finish/inventory/src/main/java/io/openliberty/guides/inventory/InventoryResource.java[]
+----
+
+The above command returns a value of 20, indicating that a total of 20 requests are made to the `system` service that are multiplied by the following:
+
+* 5 Istio requests that included the initial request and 4 retry requests that you enabled in the [hotspot=attempts file=0]`traffic.yaml` file
+* 4 requests sent by MicroProfile that included the initial request and [hotspot=mpRetry file=1]`3` retry requests
 
 Next, you will disable some MicroProfile Fault Tolerance capabilities, so that your `system` service retries with only Istio's Retry policy. 
 
@@ -673,10 +676,10 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-15
+5
 ----
 
-The above command returns 15, indicating that a total of 15 requests are made to the `system` service.
+The above command returns 5, indicating that a total of 5 requests are made to the `system` service.
 Because MicroProfile's Retry policy is disabled, only Istio's retries are performed.
 
 traffic.yaml
@@ -825,13 +828,12 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-3
+1
 ----
 
-The above command returns 3, indicating that a total of 3 requests are made to the `system` service.
-The Istio retries that you enabled on the `inventory` service are not performed, because the Fallback policy is enabled. 
-However, the 3 default requests by Istio on the server end are still performed. 
-Because all of these requests failed, the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` fallback method is called. 
+The above command returns 1, indicating that totally 1 request is made to the `system` service.
+The Istio retries that you enabled on the `inventory` service are not performed.
+Although the [hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method failed, the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` fallback method is called.
 
 
 // =================================================================================================
@@ -857,13 +859,6 @@ after the label name indicates that the label should be deleted.
 [role=command]
 ```
 kubectl label namespace default istio-injection-
-```
-
-Navigate to the directory where you extracted {istio} and delete the {istio} resources from the cluster:
-
-[role=command]
-```
-kubectl delete -f install/kubernetes/istio-demo.yaml
 ```
 
 Delete all {istio} resources from the cluster:
