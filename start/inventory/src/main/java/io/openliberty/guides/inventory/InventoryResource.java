@@ -70,7 +70,7 @@ public class InventoryResource {
         System.err.println("The given URL string is not formatted correctly: "
                            + customURLString);
     } catch (MalformedURLException e) {
-        System.err.println("The given URL is not formatted correctly: "
+        System.err.println("The given URL string is not formatted correctly: "
                            + customURLString);
     }
 
