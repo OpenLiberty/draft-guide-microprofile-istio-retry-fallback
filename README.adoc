@@ -676,7 +676,7 @@ You will see the following output:
 
 [source, role="no_copy"]
 ----
-15
+5
 ----
 
 The above command returns 5, indicating that a total of 5 requests are made to the `system` service.
