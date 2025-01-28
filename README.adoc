@@ -833,7 +833,7 @@ You will see the following output:
 
 The above command returns 1, indicating that totally 1 request is made to the `system` service.
 The Istio retries that you enabled on the `inventory` service are not performed.
-Although the[hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method failed, the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` fallback method is called.
+Although the [hotspot=getPropertiesForHost file=1]`getPropertiesForHost()` method failed, the [hotspot=fallbackMethod file=1]`getPropertiesFallback()` fallback method is called.
 
 
 // =================================================================================================
