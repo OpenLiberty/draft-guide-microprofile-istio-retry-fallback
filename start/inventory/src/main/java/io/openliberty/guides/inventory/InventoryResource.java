@@ -12,6 +12,8 @@
 package io.openliberty.guides.inventory;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -58,12 +60,15 @@ public class InventoryResource {
     URL customURL = null;
     Properties props = null;
     try {
-        customURL = new URL(customURLString);
+        customURL = new URI(customURLString).toURL();
         SystemClient systemClient = RestClientBuilder.newBuilder()
                 .baseUrl(customURL)
                 .register(UnknownUrlExceptionMapper.class)
                 .build(SystemClient.class);
         props = systemClient.getProperties();
+    } catch (URISyntaxException e) {
+        System.err.println("The given URL string is not formatted correctly: "
+                           + customURLString);
     } catch (MalformedURLException e) {
         System.err.println("The given URL is not formatted correctly: "
                            + customURLString);
@@ -92,4 +97,5 @@ public class InventoryResource {
   public void reset() {
       manager.reset();
   }
+
 }
